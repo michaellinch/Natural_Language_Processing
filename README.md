@@ -4,35 +4,33 @@
 
 This project demonstrates the application of **Natural Language Processing (NLP)** techniques to analyze customer reviews from Amazon's **Luxury Beauty** product category.
 
-The objective is to transform thousands of unstructured customer reviews into meaningful business insights that can help Amazon better understand customer sentiment, identify commonly discussed product features, and discover major discussion topics.
+Using the **Amazon Review Dataset (UCSD)**, the project transforms thousands of unstructured customer reviews into meaningful business insights. The analysis focuses on understanding customer sentiment, identifying frequently discussed product features, extracting named entities, and discovering hidden discussion topics through topic modelling.
 
-The project uses the **Amazon Review Dataset (UCSD)** and applies several NLP techniques including text preprocessing, vocabulary building, sentiment analysis, Named Entity Recognition (NER), and topic modelling.
+The project implements a complete end-to-end NLP pipeline, from data preprocessing to visualization, using Python and popular NLP libraries.
 
 ---
 
-## Dataset
+# Dataset
 
-**Dataset Source**
+## Dataset Source
 
-Amazon Review Dataset (UCSD)
+**Amazon Review Dataset (UCSD)**
 
 https://cseweb.ucsd.edu/~jmcauley/datasets/amazon_v2/
 
 ### Selected Dataset
 
-- Luxury_Beauty_5.json.gz
+- **Luxury_Beauty_5.json.gz**
 - Amazon Luxury Beauty Reviews
 - Reviews collected between **May 1996 – October 2018**
 
-The Luxury Beauty category was selected because luxury products typically have higher profit margins, making customer sentiment and brand perception especially valuable for business decision making.
+The Luxury Beauty category was selected because luxury products generally have higher profit margins, making customer feedback and brand perception especially valuable for business decision-making.
 
 ---
 
 # Project Workflow
 
-The project follows a complete NLP pipeline:
-
-```
+```text
 Amazon Review Dataset
         │
         ▼
@@ -82,15 +80,15 @@ Business Insights
 
 ## 1. Dataset Preparation
 
-The Amazon Luxury Beauty dataset was loaded from the compressed JSON file and converted into a Pandas DataFrame.
+The Amazon Luxury Beauty dataset was loaded from the compressed JSON file (`Luxury_Beauty_5.json.gz`) and converted into a Pandas DataFrame.
 
-The review text (`reviewText`) was selected as the primary field for NLP analysis.
+The review text (`reviewText`) was selected as the primary feature for subsequent NLP analysis.
 
 ---
 
 ## 2. Text Preprocessing
 
-A preprocessing pipeline was created to clean the review text before applying NLP techniques.
+A preprocessing pipeline was developed to clean and standardize customer reviews before analysis.
 
 The preprocessing steps include:
 
@@ -103,7 +101,7 @@ The preprocessing steps include:
 - Stemming
 - Lemmatization
 
-This process standardizes the text and improves the quality of downstream NLP tasks.
+These preprocessing steps reduce noise and improve the performance of downstream NLP models.
 
 ---
 
@@ -111,35 +109,49 @@ This process standardizes the text and improves the quality of downstream NLP ta
 
 After preprocessing, a vocabulary was constructed from the cleaned review text.
 
-This allows the NLP models to understand the collection of unique words appearing in customer reviews.
+A **WordCloud** was generated to visualize the most frequently occurring words across customer reviews. Frequently appearing words highlight common product characteristics, customer experiences, and recurring discussion themes.
 
-A **WordCloud** was also generated to visualize the most frequently occurring words within the Luxury Beauty reviews.
+<p align="center">
+  <a href="images/wordcloud.png">
+    <img src="images/wordcloud.png" width="750">
+  </a>
+</p>
 
-Commonly appearing words included terms related to skincare, beauty products, and customer experiences.
+<p align="center">
+<i>Figure 1. WordCloud generated from the preprocessed Amazon Luxury Beauty reviews (click the image to enlarge).</i>
+</p>
 
 ---
 
 ## 4. Sentiment Analysis
 
-Customer sentiment was evaluated using **TextBlob**.
-
-Each review was assigned a polarity score ranging from:
+Customer sentiment was evaluated using **TextBlob**, which assigns each review a sentiment polarity score ranging from:
 
 - **-1** → Negative
 - **0** → Neutral
 - **+1** → Positive
 
-A histogram was generated to visualize the distribution of sentiment across all reviews.
+A histogram was generated using **Matplotlib** to visualize the overall sentiment distribution across all reviews.
 
-The project also compared sentiment polarity with customers' numerical ratings to evaluate whether textual sentiment aligns with star ratings.
+The project also compares sentiment polarity with customers' numerical star ratings to determine whether textual sentiment aligns with product ratings.
+
+<p align="center">
+  <a href="images/sentiment_histogram.png">
+    <img src="images/sentiment_histogram.png" width="700">
+  </a>
+</p>
+
+<p align="center">
+<i>Figure 2. Distribution of sentiment polarity across Amazon Luxury Beauty reviews (click the image to enlarge).</i>
+</p>
 
 ---
 
 ## 5. Named Entity Recognition (NER)
 
-Named Entity Recognition was performed using **SpaCy's pretrained English model (`en_core_web_sm`)**.
+Named Entity Recognition (NER) was performed using **SpaCy's pretrained English model (`en_core_web_sm`)**.
 
-Entities extracted include:
+The extracted entities include:
 
 - Organizations
 - Products
@@ -149,55 +161,83 @@ Entities extracted include:
 - Quantities
 - Monetary values
 
-NER helps transform unstructured customer reviews into structured information, allowing businesses to identify frequently mentioned brands, products, and other important entities.
+NER transforms unstructured customer reviews into structured information by identifying important entities frequently mentioned throughout the dataset.
+
+<p align="center">
+  <a href="images/ner_visualization.png">
+    <img src="images/ner_visualization.png" width="850">
+  </a>
+</p>
+
+<p align="center">
+<i>Figure 3. Example output of SpaCy Named Entity Recognition (click the image to enlarge).</i>
+</p>
 
 ---
 
 ## 6. Topic Modelling
 
-Latent Dirichlet Allocation (**LDA**) was used to discover hidden topics discussed within customer reviews.
+Latent Dirichlet Allocation (**LDA**) was used to identify hidden discussion topics within customer reviews.
 
-Steps performed include:
+The topic modelling process involved:
 
-- Convert reviews into document-term matrices using CountVectorizer
-- Train an LDA model with **5 topics**
-- Assign each review to its dominant topic
-- Extract the top keywords representing each topic
+- Creating a document-term matrix using `CountVectorizer`
+- Training an LDA model with **5 topics**
+- Assigning each review to its dominant topic
+- Extracting the top keywords representing each topic
 
-Finally, **pyLDAvis** was used to visualize topic distributions and keyword importance interactively.
+An interactive visualization was created using **pyLDAvis**, allowing exploration of topic relationships and keyword importance.
+
+<p align="center">
+  <a href="images/lda_visualization.png">
+    <img src="images/lda_visualization.png" width="850">
+  </a>
+</p>
+
+<p align="center">
+<i>Figure 4. LDA topic visualization generated using pyLDAvis (click the image to enlarge).</i>
+</p>
+
+**Interactive Version**
+
+If viewing this repository locally, you can explore the interactive topic model by opening:
+
+- `images/lda_visualization.html`
 
 ---
 
 # Project Results
 
-The NLP pipeline provides several business insights, including:
+The NLP pipeline generated several valuable business insights, including:
 
-- Overall customer sentiment towards Luxury Beauty products
-- Agreement between review sentiment and product ratings
-- Frequently discussed product features
-- Important named entities mentioned by customers
-- Major discussion topics across thousands of reviews
+- Overall customer sentiment toward Luxury Beauty products
+- Agreement between review sentiment and numerical ratings
+- Frequently discussed product features and attributes
+- Important named entities such as brands and organizations
+- Hidden discussion topics extracted from thousands of customer reviews
 
-These insights can help businesses:
+These findings can support businesses by helping them:
 
-- Improve products
+- Improve product quality
 - Monitor customer satisfaction
 - Understand customer preferences
-- Enhance marketing strategies
-- Support data-driven business decisions
+- Refine marketing strategies
+- Make data-driven business decisions
 
 ---
 
 # Project Structure
 
-```
+```text
 ├── Luxury_Beauty_5.json.gz
 ├── NLP_Project.ipynb
 ├── README.md
 ├── images/
 │   ├── wordcloud.png
 │   ├── sentiment_histogram.png
-│   └── lda_visualization.png
+│   ├── ner_visualization.png
+│   ├── lda_visualization.png
+│   └── lda_visualization.html
 ```
 
 ---
@@ -220,30 +260,30 @@ import pyLDAvis
 
 # Key Learning Outcomes
 
-Through this project, I learned how to:
+Through this project, I gained practical experience in:
 
-- Build an end-to-end NLP pipeline
-- Clean and preprocess large text datasets
-- Perform sentiment analysis using TextBlob
-- Apply Named Entity Recognition using SpaCy
-- Discover hidden topics using LDA topic modelling
-- Visualize NLP outputs using WordCloud and pyLDAvis
-- Transform unstructured customer reviews into actionable business insights
+- Building an end-to-end NLP pipeline
+- Cleaning and preprocessing large-scale text datasets
+- Performing sentiment analysis using TextBlob
+- Applying Named Entity Recognition with SpaCy
+- Discovering hidden topics using LDA topic modelling
+- Visualizing NLP outputs using WordCloud, Matplotlib, and pyLDAvis
+- Transforming unstructured customer reviews into actionable business insights
 
 ---
 
 # Future Improvements
 
-Potential improvements include:
+Potential future enhancements include:
 
-- Using transformer-based sentiment models (e.g., BERT or RoBERTa)
+- Applying transformer-based sentiment models (e.g., BERT or RoBERTa)
 - Fine-tuning SpaCy's NER model for e-commerce-specific entities
 - Performing aspect-based sentiment analysis
-- Comparing multiple topic modelling algorithms (LDA, NMF, BERTopic)
+- Comparing multiple topic modelling approaches (LDA, NMF, BERTopic)
 - Building an interactive dashboard using Streamlit or Dash
 
 ---
 
 # Author
 
-This project was completed as part of a Natural Language Processing (NLP) coursework assignment demonstrating the practical application of NLP techniques on real-world Amazon customer review data.
+This project was completed as part of a Natural Language Processing (NLP) coursework assignment, demonstrating the practical application of modern NLP techniques to real-world Amazon customer review data.
